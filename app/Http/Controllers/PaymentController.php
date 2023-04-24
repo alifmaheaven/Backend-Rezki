@@ -8,12 +8,6 @@ use Illuminate\Support\Facades\Validator;
 
 class PaymentController extends Controller
 {
-
-    public function __construct()
-    {
-        $this->middleware('auth:api');
-    }
-
     public function index()
     {
         $data = Payment::where('is_active', true)->get();

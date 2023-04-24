@@ -8,12 +8,6 @@ use Illuminate\Support\Facades\Validator;
 
 class CampaignReportDetailController extends Controller
 {
-
-    public function __construct()
-    {
-        $this->middleware('auth:api');
-    }
-
     public function index()
     {
         $data = CampaignReportDetail::where('is_active', true)->get();

@@ -11,11 +11,6 @@ use App\Models\User;
 class AuthController extends Controller
 {
 
-    public function __construct()
-    {
-        $this->middleware('auth:api', ['except' => ['login','register']]);
-    }
-
     public function login(Request $request)
     {
 
@@ -78,7 +73,22 @@ class AuthController extends Controller
             ], 422);
         }
 
-        $user = User::create($request->all());
+        $user = User::create([
+            'name' => $request->name,
+            'date_of_birth' => $request->date_of_birth,
+            'full_name' => $request->full_name,
+            'gender' => $request->gender,
+            'address' => $request->address,
+            'id_card' => $request->id_card,
+            'tax_registration_number' => $request->tax_registration_number,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'employment_status' => $request->employment_status,
+            'authorization_level' => $request->authorization_level,
+            'id_user_active' => $request->id_user_active,
+            'id_user_bank' => $request->id_user_bank,
+            'business_certificate' => $request->business_certificate,
+        ]);
 
         $token = Auth::login($user);
         return response()->json([

@@ -9,12 +9,6 @@ use Illuminate\Support\Facades\Validator;
 
 class UserActiveController extends Controller
 {
-
-    public function __construct()
-    {
-        $this->middleware('auth:api');
-    }
-
     public function index()
     {
         $data = UserActive::where('is_active', true)->get();

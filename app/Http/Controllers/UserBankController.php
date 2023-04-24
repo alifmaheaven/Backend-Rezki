@@ -8,12 +8,6 @@ use Illuminate\Support\Facades\Validator;
 
 class UserBankController extends Controller
 {
-
-    public function __construct()
-    {
-        $this->middleware('auth:api');
-    }
-
     public function index()
     {
         $data = UserBank::where('is_active', true)->get();

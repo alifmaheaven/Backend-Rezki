@@ -8,12 +8,6 @@ use Illuminate\Support\Facades\Validator;
 
 class NewsController extends Controller
 {
-
-    public function __construct()
-    {
-        $this->middleware('auth:api');
-    }
-
     public function index()
     {
         $data = News::where('is_active', true)->get();

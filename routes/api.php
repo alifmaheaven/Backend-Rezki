@@ -32,17 +32,30 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
+/*
+|-------------------------------------------------------------------------------------------|
+| Note                                                                                      |
+|-------------------------------------------------------------------------------------------|
+| 1. when you want allow all user roles acces api you can use "auth" only                   |
+| 2. when you want allow specific user roles acces api you can use "auth:1,2"               |
+| 3. you want spesific api like post only can acces by investor, you can try like this      |
+| "$router->middleware('auth:3')->get('', [UserBankController::class, 'index']);"           |
+| 4. 1 = for investor, 2 = UMKM, 3 = Reviewer                                               |
+|-------------------------------------------------------------------------------------------|
+*/
+
+
 Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
     Route::post('register', 'register');
-    Route::post('logout', 'logout');
-    Route::post('refresh', 'refresh');
+    Route::post('logout', 'logout')->middleware('auth');
+    Route::post('refresh', 'refresh')->middleware('auth');
 });
 
-
 /*
-|--------------------------------------------------------------------------
-| API Each Table Routes
+|---------------------------------------------------------------------------|
+| API Each Table Routes                                                     |
+|---------------------------------------------------------------------------|
 | http://127.0.0.1:8000/api/user-banks                  |GET|POST|PUT|DELETE|
 | http://127.0.0.1:8000/api/user-actives                |GET|POST|PUT|DELETE|
 | http://127.0.0.1:8000/api/wishes                      |GET|POST|PUT|DELETE|
@@ -56,123 +69,148 @@ Route::controller(AuthController::class)->group(function () {
 | http://127.0.0.1:8000/api/campaign-report-details     |GET|POST|PUT|DELETE|
 | http://127.0.0.1:8000/api/withdraws                   |GET|POST|PUT|DELETE|
 | http://127.0.0.1:8000/api/transactions                |GET|POST|PUT|DELETE|
-|--------------------------------------------------------------------------
+|---------------------------------------------------------------------------|
 */
+
 // user_banks
-Route::controller(UserBankController::class)->group(function () {
-    Route::get('user-banks', 'index');
-    Route::post('user-banks', 'store');
-    Route::get('user-banks/{id}', 'show');
-    Route::put('user-banks/{id}', 'update');
-    Route::delete('user-banks/{id}', 'destroy');
+Route::group(['prefix' => 'user-banks'], function ($router) {
+    Route::group(['middleware' => 'auth:1,2,3'], function ($router) {
+        $router->get('', [UserBankController::class, 'index']);
+        $router->get('/{id}', [UserBankController::class, 'show']);
+        $router->post('', [UserBankController::class, 'store']);
+        $router->put('{id}', [UserBankController::class, 'update']);
+        $router->delete('{id}', [UserBankController::class, 'destroy']);
+    });
 });
 
 // user_actives
-Route::controller(UserActiveController::class)->group(function () {
-    Route::get('user-actives', 'index');
-    Route::post('user-actives', 'store');
-    Route::get('user-actives/{id}', 'show');
-    Route::put('user-actives/{id}', 'update');
-    Route::delete('user-actives/{id}', 'destroy');
+Route::group(['prefix' => 'user-actives'], function ($router) {
+    Route::group(['middleware' => 'auth:1,2,3'], function ($router) {
+        $router->get('', [UserActiveController::class, 'index']);
+        $router->get('/{id}', [UserActiveController::class, 'show']);
+        $router->post('', [UserActiveController::class, 'store']);
+        $router->put('{id}', [UserActiveController::class, 'update']);
+        $router->delete('{id}', [UserActiveController::class, 'destroy']);
+    });
 });
 
 // wishes
-Route::controller(WishesController::class)->group(function () {
-    Route::get('wishes', 'index');
-    Route::post('wishes', 'store');
-    Route::get('wishes/{id}', 'show');
-    Route::put('wishes/{id}', 'update');
-    Route::delete('wishes/{id}', 'destroy');
+Route::group(['prefix' => 'wishes'], function ($router) {
+    Route::group(['middleware' => 'auth:1,2,3'], function ($router) {
+        $router->get('', [WishesController::class, 'index']);
+        $router->get('/{id}', [WishesController::class, 'show']);
+        $router->post('', [WishesController::class, 'store']);
+        $router->put('{id}', [WishesController::class, 'update']);
+        $router->delete('{id}', [WishesController::class, 'destroy']);
+    });
 });
 
 // user_wishes
-Route::controller(UserWishController::class)->group(function () {
-    Route::get('user-wishes', 'index');
-    Route::post('user-wishes', 'store');
-    Route::get('user-wishes/{id}', 'show');
-    Route::put('user-wishes/{id}', 'update');
-    Route::delete('user-wishes/{id}', 'destroy');
+Route::group(['prefix' => 'user-wishes'], function ($router) {
+    Route::group(['middleware' => 'auth:1,2,3'], function ($router) {
+        $router->get('', [UserWishController::class, 'index']);
+        $router->get('/{id}', [UserWishController::class, 'show']);
+        $router->post('', [UserWishController::class, 'store']);
+        $router->put('{id}', [UserWishController::class, 'update']);
+        $router->delete('{id}', [UserWishController::class, 'destroy']);
+    });
 });
 
 // news
-Route::controller(NewsController::class)->group(function () {
-    Route::get('news', 'index');
-    Route::post('news', 'store');
-    Route::get('news/{id}', 'show');
-    Route::put('news/{id}', 'update');
-    Route::delete('news/{id}', 'destroy');
+Route::group(['prefix' => 'news'], function ($router) {
+    Route::group(['middleware' => 'auth:1,2,3'], function ($router) {
+        $router->get('', [NewsController::class, 'index']);
+        $router->get('/{id}', [NewsController::class, 'show']);
+        $router->post('', [NewsController::class, 'store']);
+        $router->put('{id}', [NewsController::class, 'update']);
+        $router->delete('{id}', [NewsController::class, 'destroy']);
+    });
 });
 
 // campaign_banners
-Route::controller(CampaignBannerController::class)->group(function () {
-    Route::get('campaign-banners', 'index');
-    Route::post('campaign-banners', 'store');
-    Route::get('campaign-banners/{id}', 'show');
-    Route::put('campaign-banners/{id}', 'update');
-    Route::delete('campaign-banners/{id}', 'destroy');
+Route::group(['prefix' => 'campaign-banners'], function ($router) {
+    Route::group(['middleware' => 'auth:1,2,3'], function ($router) {
+        $router->get('', [CampaignBannerController::class, 'index']);
+        $router->get('/{id}', [CampaignBannerController::class, 'show']);
+        $router->post('', [CampaignBannerController::class, 'store']);
+        $router->put('{id}', [CampaignBannerController::class, 'update']);
+        $router->delete('{id}', [CampaignBannerController::class, 'destroy']);
+    });
 });
 
 // campaign_periods
-Route::controller(CampaignPeriodController::class)->group(function () {
-    Route::get('campaign-periods', 'index');
-    Route::post('campaign-periods', 'store');
-    Route::get('campaign-periods/{id}', 'show');
-    Route::put('campaign-periods/{id}', 'update');
-    Route::delete('campaign-periods/{id}', 'destroy');
+Route::group(['prefix' => 'campaign-periods'], function ($router) {
+    Route::group(['middleware' => 'auth:1,2,3'], function ($router) {
+        $router->get('', [CampaignPeriodController::class, 'index']);
+        $router->get('/{id}', [CampaignPeriodController::class, 'show']);
+        $router->post('', [CampaignPeriodController::class, 'store']);
+        $router->put('{id}', [CampaignPeriodController::class, 'update']);
+        $router->delete('{id}', [CampaignPeriodController::class, 'destroy']);
+    });
 });
 
 // campaigns
-Route::controller(CampaignController::class)->group(function () {
-    Route::get('campaigns', 'index');
-    Route::post('campaigns', 'store');
-    Route::get('campaigns/{id}', 'show');
-    Route::put('campaigns/{id}', 'update');
-    Route::delete('campaigns/{id}', 'destroy');
+Route::group(['prefix' => 'campaigns'], function ($router) {
+    Route::group(['middleware' => 'auth:1,2,3'], function ($router) {
+        $router->get('', [CampaignController::class, 'index']);
+        $router->get('/{id}', [CampaignController::class, 'show']);
+        $router->post('', [CampaignController::class, 'store']);
+        $router->put('{id}', [CampaignController::class, 'update']);
+        $router->delete('{id}', [CampaignController::class, 'destroy']);
+    });
 });
 
 // payments
-Route::controller(PaymentController::class)->group(function () {
-    Route::get('payments', 'index');
-    Route::post('payments', 'store');
-    Route::get('payments/{id}', 'show');
-    Route::put('payments/{id}', 'update');
-    Route::delete('payments/{id}', 'destroy');
+Route::group(['prefix' => 'payments'], function ($router) {
+    Route::group(['middleware' => 'auth:1,2,3'], function ($router) {
+        $router->get('', [PaymentController::class, 'index']);
+        $router->get('/{id}', [PaymentController::class, 'show']);
+        $router->post('', [PaymentController::class, 'store']);
+        $router->put('{id}', [PaymentController::class, 'update']);
+        $router->delete('{id}', [PaymentController::class, 'destroy']);
+    });
 });
 
 // campaign_reports
-Route::controller(CampaignReportController::class)->group(function () {
-    Route::get('campaign-reports', 'index');
-    Route::post('campaign-reports', 'store');
-    Route::get('campaign-reports/{id}', 'show');
-    Route::put('campaign-reports/{id}', 'update');
-    Route::delete('campaign-reports/{id}', 'destroy');
+Route::group(['prefix' => 'campaign-reports'], function ($router) {
+    Route::group(['middleware' => 'auth:1,2,3'], function ($router) {
+        $router->get('', [CampaignReportController::class, 'index']);
+        $router->get('/{id}', [CampaignReportController::class, 'show']);
+        $router->post('', [CampaignReportController::class, 'store']);
+        $router->put('{id}', [CampaignReportController::class, 'update']);
+        $router->delete('{id}', [CampaignReportController::class, 'destroy']);
+    });
 });
 
 // campaign_report_details
-Route::controller(CampaignReportDetailController::class)->group(function () {
-    Route::get('campaign-report-details', 'index');
-    Route::post('campaign-report-details', 'store');
-    Route::get('campaign-report-details/{id}', 'show');
-    Route::put('campaign-report-details/{id}', 'update');
-    Route::delete('campaign-report-details/{id}', 'destroy');
+Route::group(['prefix' => 'campaign-report-details'], function ($router) {
+    Route::group(['middleware' => 'auth:1,2,3'], function ($router) {
+        $router->get('', [CampaignReportDetailController::class, 'index']);
+        $router->get('/{id}', [CampaignReportDetailController::class, 'show']);
+        $router->post('', [CampaignReportDetailController::class, 'store']);
+        $router->put('{id}', [CampaignReportDetailController::class, 'update']);
+        $router->delete('{id}', [CampaignReportDetailController::class, 'destroy']);
+    });
 });
 
 // withdraws
-Route::controller(WithdrawController::class)->group(function () {
-    Route::get('withdraws', 'index');
-    Route::post('withdraws', 'store');
-    Route::get('withdraws/{id}', 'show');
-    Route::put('withdraws/{id}', 'update');
-    Route::delete('withdraws/{id}', 'destroy');
+Route::group(['prefix' => 'withdraws'], function ($router) {
+    Route::group(['middleware' => 'auth:1,2,3'], function ($router) {
+        $router->get('', [WithdrawController::class, 'index']);
+        $router->get('/{id}', [WithdrawController::class, 'show']);
+        $router->post('', [WithdrawController::class, 'store']);
+        $router->put('{id}', [WithdrawController::class, 'update']);
+        $router->delete('{id}', [WithdrawController::class, 'destroy']);
+    });
 });
 
 // transactions
-Route::controller(TransactionController::class)->group(function () {
-    Route::get('transactions', 'index');
-    Route::post('transactions', 'store');
-    Route::get('transactions/{id}', 'show');
-    Route::put('transactions/{id}', 'update');
-    Route::delete('transactions/{id}', 'destroy');
+Route::group(['prefix' => 'transactions'], function ($router) {
+    Route::group(['middleware' => 'auth:1,2,3'], function ($router) {
+        $router->get('', [TransactionController::class, 'index']);
+        $router->get('/{id}', [TransactionController::class, 'show']);
+        $router->post('', [TransactionController::class, 'store']);
+        $router->put('{id}', [TransactionController::class, 'update']);
+        $router->delete('{id}', [TransactionController::class, 'destroy']);
+    });
 });
-
-
