@@ -16,7 +16,7 @@ class UserBankController extends Controller
 
     public function index()
     {
-        $data = UserBank::all();
+        $data = UserBank::where('is_active', true)->get();
         return response()->json([
             'status' => 'success',
             'data' => $data,
@@ -25,9 +25,11 @@ class UserBankController extends Controller
 
     public function store(Request $request)
     {
+
         $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:255',
-            'description' => 'required|string|max:255',
+            'bank_name' => 'required|string|max:255',
+            'account_number' => 'required|max:255',
+            'account_name' => 'required|string|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -38,13 +40,14 @@ class UserBankController extends Controller
         }
 
         $data = UserBank::create([
-            'title' => $request->title,
-            'description' => $request->description,
+            'bank_name' => $request->bank_name,
+            'account_number' => $request->account_number,
+            'account_name' => $request->account_name,
         ]);
 
         return response()->json([
             'status' => 'success',
-            'message' => 'UserBank created successfully',
+            'message' => 'Data created successfully',
             'data' => $data,
         ]);
     }
@@ -61,8 +64,9 @@ class UserBankController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:255',
-            'description' => 'required|string|max:255',
+            'bank_name' => 'required|string|max:255',
+            'account_number' => 'required|max:255',
+            'account_name' => 'required|string|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -73,26 +77,29 @@ class UserBankController extends Controller
         }
 
         $data = UserBank::find($id);
-        $data->title = $request->title;
-        $data->description = $request->description;
+        $data->bank_name = $request->bank_name;
+        $data->account_number = $request->account_number;
+        $data->account_name = $request->account_name;
         $data->save();
 
         return response()->json([
             'status' => 'success',
-            'message' => 'UserBank updated successfully',
+            'message' => 'Data updated successfully',
             'data' => $data,
         ]);
     }
-    
+
 
     public function destroy($id)
     {
         $data = UserBank::find($id);
-        $data->delete();
+        $data->is_active = false;
+        $data->save();
+        // $data->delete();
 
         return response()->json([
             'status' => 'success',
-            'message' => 'UserBank deleted successfully',
+            'message' => 'Data deleted successfully',
             'data' => $data,
         ]);
     }

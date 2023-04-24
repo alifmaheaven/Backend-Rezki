@@ -9,4 +9,8 @@ class Wishes extends Model
 {
     use HasFactory;
     protected $table = 'wishes';
+    protected $fillable = [
+        'message',
+        'is_active',
+    ];
 }

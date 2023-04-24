@@ -9,4 +9,9 @@ class CampaignBanner extends Model
 {
     use HasFactory;
     protected $table = 'campaign_banners';
+    protected $fillable = [
+        'name',
+        'url',
+        'is_active',
+    ];
 }

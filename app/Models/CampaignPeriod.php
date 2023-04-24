@@ -9,4 +9,11 @@ class CampaignPeriod extends Model
 {
     use HasFactory;
     protected $table = 'campaign_periods';
+
+    protected $fillable = [
+        'period',
+        'profit_share',
+        'expected_roi',
+        'is_active',
+    ];
 }

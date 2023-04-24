@@ -14,6 +14,23 @@ class User extends Authenticatable implements JWTSubject
     use HasApiTokens, HasFactory, Notifiable;
     protected $table = 'users';
 
+    protected $fillable = [
+        'name',
+        'date_of_birth',
+        'full_name',
+        'gender',
+        'address',
+        'id_card',
+        'tax_registration_number',
+        'email',
+        'password',
+        'employment_status',
+        'id_user_active',
+        'id_user_bank',
+        'authorization_level',
+        'business_certificate',
+        'is_active',
+    ];
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -22,9 +39,6 @@ class User extends Authenticatable implements JWTSubject
     protected $hidden = [
         'password',
     ];
-
-
-    
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.

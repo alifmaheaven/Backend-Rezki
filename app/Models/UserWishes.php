@@ -9,4 +9,9 @@ class UserWishes extends Model
 {
     use HasFactory;
     protected $table = 'user_wishes';
+    protected $fillable = [
+        'id_user',
+        'id_wish',
+        'is_active',
+    ];
 }

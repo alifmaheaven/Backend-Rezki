@@ -9,4 +9,12 @@ class Withdraw extends Model
 {
     use HasFactory;
     protected $table = 'withdraws';
+
+    protected $fillable = [
+        'id_user',
+        'id_campaign_report_detail',
+        'amount',
+        'date',
+        'is_active',
+    ];
 }
