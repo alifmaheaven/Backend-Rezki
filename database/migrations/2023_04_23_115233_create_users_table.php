@@ -29,7 +29,10 @@ return new class extends Migration
             $table->foreignId('id_user_bank')->references('id')->on('user_banks')->onDelete('cascade');
             $table->enum('authorization_level', ['1', '2', '3']);
             $table->string('business_certificate')->nullable();
-            $table->boolean('is_active')->default('1');
+            $table->string('updated_by')->default('system');
+            $table->string('created_by')->default('system');
+            $table->boolean('is_deleted')->default('0');
+            $table->integer('version')->default('1');
             $table->timestamps();
         });
     }

@@ -8,12 +8,31 @@ use Illuminate\Support\Facades\Validator;
 
 class CampaignController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $data = Campaign::where('is_active', true)->get();
+        $current_page = $request->query('current_page', 1);
+        $data = new Campaign;
+
+        // Apply filters
+        $fillable_column = (new Campaign())->getFillable();
+        foreach ($fillable_column as $column) {
+            if ($request->query($column)) {
+                $data = $data->where($column, 'like', '%' . $request->query($column) . '%');
+            }
+        }
+
+        // Apply is_active condition and paginate
+        $data = $data->where('is_deleted', false)->paginate(10, ['*'], 'page', $current_page);
+
         return response()->json([
             'status' => 'success',
-            'data' => $data,
+            'data' => $data->items(),
+            'meta' => [
+                'current_page' => $data->currentPage(),
+                'last_page' => $data->lastPage(),
+                'total_records' => $data->total(),
+            ],
+            'server_time' => (int) round(microtime(true) * 1000),
         ]);
     }
 
@@ -43,6 +62,7 @@ class CampaignController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => $validator->errors(),
+                'server_time' => (int) round(microtime(true) * 1000),
             ], 422);
         }
 
@@ -70,6 +90,7 @@ class CampaignController extends Controller
             'status' => 'success',
             'message' => 'Data created successfully',
             'data' => $data,
+            'server_time' => (int) round(microtime(true) * 1000),
         ]);
     }
 
@@ -78,7 +99,9 @@ class CampaignController extends Controller
         $data = Campaign::find($id);
         return response()->json([
             'status' => 'success',
+            'message' => 'Data retrieved successfully',
             'data' => $data,
+            'server_time' => (int) round(microtime(true) * 1000),
         ]);
     }
 
@@ -108,6 +131,7 @@ class CampaignController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => $validator->errors(),
+                'server_time' => (int) round(microtime(true) * 1000),
             ], 422);
         }
 
@@ -135,6 +159,7 @@ class CampaignController extends Controller
             'status' => 'success',
             'message' => 'Data updated successfully',
             'data' => $data,
+            'server_time' => (int) round(microtime(true) * 1000),
         ]);
     }
 
@@ -142,7 +167,7 @@ class CampaignController extends Controller
     public function destroy($id)
     {
         $data = Campaign::find($id);
-        $data->is_active = false;
+        $data->is_deleted = true;
         $data->save();
         // $data->delete();
 
@@ -150,6 +175,7 @@ class CampaignController extends Controller
             'status' => 'success',
             'message' => 'Data deleted successfully',
             'data' => $data,
+            'server_time' => (int) round(microtime(true) * 1000),
         ]);
     }
 }

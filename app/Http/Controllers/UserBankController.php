@@ -5,15 +5,35 @@ namespace App\Http\Controllers;
 use App\Models\UserBank;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class UserBankController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $data = UserBank::where('is_active', true)->get();
+        $current_page = $request->query('current_page', 1);
+        $data = new UserBank;
+
+        // Apply filters
+        $fillable_column = (new UserBank())->getFillable();
+        foreach ($fillable_column as $column) {
+            if ($request->query($column)) {
+                $data = $data->where($column, 'like', '%' . $request->query($column) . '%');
+            }
+        }
+
+        // Apply is_active condition and paginate
+        $data = $data->where('is_deleted', false)->paginate(10, ['*'], 'page', $current_page);
+
         return response()->json([
             'status' => 'success',
-            'data' => $data,
+            'data' => $data->items(),
+            'meta' => [
+                'current_page' => $data->currentPage(),
+                'last_page' => $data->lastPage(),
+                'total_records' => $data->total(),
+            ],
+            'server_time' => (int) round(microtime(true) * 1000),
         ]);
     }
 
@@ -30,6 +50,7 @@ class UserBankController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => $validator->errors(),
+                'server_time' => (int) round(microtime(true) * 1000),
             ], 422);
         }
 
@@ -43,6 +64,7 @@ class UserBankController extends Controller
             'status' => 'success',
             'message' => 'Data created successfully',
             'data' => $data,
+            'server_time' => (int) round(microtime(true) * 1000),
         ]);
     }
 
@@ -51,6 +73,7 @@ class UserBankController extends Controller
         $data = UserBank::find($id);
         return response()->json([
             'status' => 'success',
+            'message' => 'Data retrieved successfully',
             'data' => $data,
         ]);
     }
@@ -67,6 +90,7 @@ class UserBankController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => $validator->errors(),
+                'server_time' => (int) round(microtime(true) * 1000),
             ], 422);
         }
 
@@ -80,6 +104,7 @@ class UserBankController extends Controller
             'status' => 'success',
             'message' => 'Data updated successfully',
             'data' => $data,
+            'server_time' => (int) round(microtime(true) * 1000),
         ]);
     }
 
@@ -87,7 +112,7 @@ class UserBankController extends Controller
     public function destroy($id)
     {
         $data = UserBank::find($id);
-        $data->is_active = false;
+        $data->is_deleted = true;
         $data->save();
         // $data->delete();
 
@@ -95,6 +120,7 @@ class UserBankController extends Controller
             'status' => 'success',
             'message' => 'Data deleted successfully',
             'data' => $data,
+            'server_time' => (int) round(microtime(true) * 1000),
         ]);
     }
 }

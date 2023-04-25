@@ -18,7 +18,10 @@ return new class extends Migration
             $table->string('bank_name');
             $table->string('account_number');
             $table->string('account_name');
-            $table->boolean('is_active')->default('1');
+            $table->string('updated_by')->default('system');
+            $table->string('created_by')->default('system');
+            $table->boolean('is_deleted')->default('0');
+            $table->integer('version')->default('1');
             $table->timestamps();
         });
     }

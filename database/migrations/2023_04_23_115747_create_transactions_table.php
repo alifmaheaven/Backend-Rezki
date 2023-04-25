@@ -20,7 +20,10 @@ return new class extends Migration
             $table->foreignId('id_campaign')->references('id')->on('campaigns')->onDelete('cascade');
             $table->string('sukuk');
             $table->unsignedBigInteger('administration_fee');
-            $table->boolean('is_active')->default('1');
+            $table->string('updated_by')->default('system');
+            $table->string('created_by')->default('system');
+            $table->boolean('is_deleted')->default('0');
+            $table->integer('version')->default('1');
             $table->timestamps();
         });
     }

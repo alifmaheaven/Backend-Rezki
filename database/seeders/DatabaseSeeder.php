@@ -26,21 +26,21 @@ class DatabaseSeeder extends Seeder
                 'email' => 'investor@example.com',
                 'id_card' => '1234567890',
                 'tax_registration_number' => '1234567890',
-                'is_active' => true
+                'is_deleted' => false
             ],
             [
                 'phone_number' => '555-5678',
                 'email' => 'umkm@example.com',
                 'id_card' => '0987654321',
                 'tax_registration_number' => '0987654321',
-                'is_active' => true
+                'is_deleted' => false
             ],
             [
                 'phone_number' => '555-9012',
                 'email' => 'reviewer@example.com',
                 'id_card' => '5555555555',
                 'tax_registration_number' => '5555555555',
-                'is_active' => true
+                'is_deleted' => false
             ],
         ];
 
@@ -54,7 +54,7 @@ class DatabaseSeeder extends Seeder
                 'bank_name' => 'Bank of America',
                 'account_number' => '1234567890',
                 'account_name' => 'John Doe',
-                'is_active' => true,
+                'is_deleted' => false,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -62,7 +62,7 @@ class DatabaseSeeder extends Seeder
                 'bank_name' => 'Chase',
                 'account_number' => '0987654321',
                 'account_name' => 'Jane Smith',
-                'is_active' => true,
+                'is_deleted' => false,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -70,7 +70,7 @@ class DatabaseSeeder extends Seeder
                 'bank_name' => 'Wells Fargo',
                 'account_number' => '4567890123',
                 'account_name' => 'Bob Johnson',
-                'is_active' => true,
+                'is_deleted' => false,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -97,7 +97,7 @@ class DatabaseSeeder extends Seeder
                 'id_user_active' => '1',
                 'id_user_bank' => '1',
                 'business_certificate' => null,
-                'is_active' => true
+                'is_deleted' => false
             ],
             [
                 'name' => 'Jane Smith',
@@ -114,7 +114,7 @@ class DatabaseSeeder extends Seeder
                 'id_user_active' => '2',
                 'id_user_bank' => '2',
                 'business_certificate' => null,
-                'is_active' => true
+                'is_deleted' => false
             ],
             [
                 'name' => 'Bob Johnson',
@@ -131,7 +131,7 @@ class DatabaseSeeder extends Seeder
                 'id_user_active' => '3',
                 'id_user_bank' => '3',
                 'business_certificate' => null,
-                'is_active' => true
+                'is_deleted' => false
             ],
         ];
 

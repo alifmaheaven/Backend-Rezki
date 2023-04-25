@@ -17,7 +17,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('id_user')->references('id')->on('users')->onDelete('cascade');
             $table->foreignId('id_wish')->references('id')->on('wishes')->onDelete('cascade');
-            $table->boolean('is_active')->default('1');
+            $table->string('updated_by')->default('system');
+            $table->string('created_by')->default('system');
+            $table->boolean('is_deleted')->default('0');
+            $table->integer('version')->default('1');
             $table->timestamps();
         });
     }

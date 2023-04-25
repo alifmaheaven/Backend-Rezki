@@ -19,7 +19,10 @@ return new class extends Migration
             $table->string('email');
             $table->string('id_card');
             $table->string('tax_registration_number');
-            $table->boolean('is_active')->default('1');
+            $table->string('updated_by')->default('system');
+            $table->string('created_by')->default('system');
+            $table->boolean('is_deleted')->default('0');
+            $table->integer('version')->default('1');
             $table->timestamps();
         });
     }

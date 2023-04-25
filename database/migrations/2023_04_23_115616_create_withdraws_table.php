@@ -19,7 +19,10 @@ return new class extends Migration
             $table->foreignId('id_campaign_report_detail')->references('id')->on('campaign_report_details')->onDelete('cascade');
             $table->unsignedBigInteger('amount');
             $table->date('date');
-            $table->boolean('is_active')->default('1');
+            $table->string('updated_by')->default('system');
+            $table->string('created_by')->default('system');
+            $table->boolean('is_deleted')->default('0');
+            $table->integer('version')->default('1');
             $table->timestamps();
         });
     }

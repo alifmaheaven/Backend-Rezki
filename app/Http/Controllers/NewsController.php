@@ -8,12 +8,31 @@ use Illuminate\Support\Facades\Validator;
 
 class NewsController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $data = News::where('is_active', true)->get();
+        $current_page = $request->query('current_page', 1);
+        $data = new News;
+
+        // Apply filters
+        $fillable_column = (new News())->getFillable();
+        foreach ($fillable_column as $column) {
+            if ($request->query($column)) {
+                $data = $data->where($column, 'like', '%' . $request->query($column) . '%');
+            }
+        }
+
+        // Apply is_active condition and paginate
+        $data = $data->where('is_deleted', false)->paginate(10, ['*'], 'page', $current_page);
+
         return response()->json([
             'status' => 'success',
-            'data' => $data,
+            'data' => $data->items(),
+            'meta' => [
+                'current_page' => $data->currentPage(),
+                'last_page' => $data->lastPage(),
+                'total_records' => $data->total(),
+            ],
+            'server_time' => (int) round(microtime(true) * 1000),
         ]);
     }
 
@@ -33,6 +52,7 @@ class NewsController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => $validator->errors(),
+                'server_time' => (int) round(microtime(true) * 1000),
             ], 422);
         }
 
@@ -49,6 +69,7 @@ class NewsController extends Controller
             'status' => 'success',
             'message' => 'Data created successfully',
             'data' => $data,
+            'server_time' => (int) round(microtime(true) * 1000),
         ]);
     }
 
@@ -57,7 +78,9 @@ class NewsController extends Controller
         $data = News::find($id);
         return response()->json([
             'status' => 'success',
+            'message' => 'Data retrieved successfully',
             'data' => $data,
+            'server_time' => (int) round(microtime(true) * 1000),
         ]);
     }
 
@@ -76,6 +99,7 @@ class NewsController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => $validator->errors(),
+                'server_time' => (int) round(microtime(true) * 1000),
             ], 422);
         }
 
@@ -99,7 +123,7 @@ class NewsController extends Controller
     public function destroy($id)
     {
         $data = News::find($id);
-        $data->is_active = false;
+        $data->is_deleted = true;
         $data->save();
         // $data->delete();
 
@@ -107,6 +131,7 @@ class NewsController extends Controller
             'status' => 'success',
             'message' => 'Data deleted successfully',
             'data' => $data,
+            'server_time' => (int) round(microtime(true) * 1000),
         ]);
     }
 }

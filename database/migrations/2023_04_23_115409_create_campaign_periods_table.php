@@ -18,7 +18,10 @@ return new class extends Migration
             $table->string('period');
             $table->string('profit_share');
             $table->string('expected_roi');
-            $table->boolean('is_active')->default('1');
+            $table->string('updated_by')->default('system');
+            $table->string('created_by')->default('system');
+            $table->boolean('is_deleted')->default('0');
+            $table->integer('version')->default('1');
             $table->timestamps();
         });
     }
