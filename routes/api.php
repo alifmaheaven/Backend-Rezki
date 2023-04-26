@@ -14,6 +14,7 @@ use App\Http\Controllers\WithdrawController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\CampaignReportController;
 use App\Http\Controllers\CampaignReportDetailController;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -80,6 +81,13 @@ Route::controller(AuthController::class)->group(function () {
 |    example : http://127.0.0.1:8000/api/users?name=John
 |---------------------------------------------------------------------------|
 */
+
+// user_banks
+Route::group(['prefix' => 'upload'], function ($router) {
+    Route::group(['middleware' => 'auth:1,2,3'], function ($router) {
+        $router->post('', [FileController::class, 'store']);
+    });
+});
 
 // user_banks
 Route::group(['prefix' => 'user'], function ($router) {

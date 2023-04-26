@@ -8,10 +8,11 @@
 7. Sesuaikan konfigurasi database di file `.env`
 8. Jalankan perintah `php artisan migrate`
 9. Jalankan perintah `php artisan db:seed`
-10. Jalankan perintah `php artisan jwt:secret`
-11. Jalankan perintah `php artisan serve`
-12. Buka postman dan pointing ke `localhost:8000/api/`
-13. Selesai
+10. Jalankan perintah `php artisan storage:link`
+11. Jalankan perintah `php artisan jwt:secret`
+12. Jalankan perintah `php artisan serve`
+13. Buka postman dan pointing ke `localhost:8000/api/`
+14. Selesai
 
 ## user access
 ### user investor
