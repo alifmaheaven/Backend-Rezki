@@ -58,6 +58,7 @@ Route::controller(AuthController::class)->group(function () {
 |---------------------------------------------------------------------------|
 | API Each Table Routes                                                     |
 |---------------------------------------------------------------------------|
+| http://127.0.0.1:8000/api/upload                          |POST|          |
 | http://127.0.0.1:8000/api/user-banks                  |GET|POST|PUT|DELETE|
 | http://127.0.0.1:8000/api/user-actives                |GET|POST|PUT|DELETE|
 | http://127.0.0.1:8000/api/users                       |GET|POST|PUT|DELETE|
