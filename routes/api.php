@@ -72,6 +72,13 @@ Route::controller(AuthController::class)->group(function () {
 | http://127.0.0.1:8000/api/withdraws                   |GET|POST|PUT|DELETE|
 | http://127.0.0.1:8000/api/transactions                |GET|POST|PUT|DELETE|
 |---------------------------------------------------------------------------|
+| Note :                                                                    |
+|---------------------------------------------------------------------------|
+| 1. want add realation to another table add "include[]" parameter          |
+|    example : http://127.0.0.1:8000/api/users?include[]=user_bank&include[]=user_active
+| 2. want add filter to another table add name of your filter parameter     |
+|    example : http://127.0.0.1:8000/api/users?name=John
+|---------------------------------------------------------------------------|
 */
 
 // user_banks
