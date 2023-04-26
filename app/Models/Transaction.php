@@ -19,6 +19,17 @@ class Transaction extends Model
         'administration_fee',
         'is_active',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user', 'id');
+    }
+
+    public function campaign()
+    {
+        return $this->belongsTo(Campaign::class, 'id_campaign', 'id');
+    }
+
     public static function boot()
     {
        parent::boot();

@@ -19,6 +19,16 @@ class Withdraw extends Model
         'is_active',
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user', 'id');
+    }
+
+    public function campaign_report_detail()
+    {
+        return $this->belongsTo(CampaignReportDetail::class, 'id_campaign_report_detail', 'id');
+    }
+
     public static function boot()
     {
        parent::boot();

@@ -20,6 +20,12 @@ class News extends Model
         'id_user',
         'is_active',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user', 'id');
+    }
+
     public static function boot()
     {
        parent::boot();

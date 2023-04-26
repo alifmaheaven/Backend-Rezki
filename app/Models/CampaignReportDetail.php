@@ -19,6 +19,12 @@ class CampaignReportDetail extends Model
         'evidence',
         'is_active',
     ];
+
+    public function campaign_report()
+    {
+        return $this->belongsTo(CampaignReport::class, 'id_campaign_report', 'id');
+    }
+
     public static function boot()
     {
        parent::boot();

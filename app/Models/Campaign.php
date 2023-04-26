@@ -31,6 +31,22 @@ class Campaign extends Model
         'id_campaign_banner',
         'is_active',
     ];
+
+    public function campaign_period()
+    {
+        return $this->belongsTo(CampaignPeriod::class, 'id_campaign_period', 'id');
+    }
+
+    public function campaign_banner()
+    {
+        return $this->belongsTo(CampaignBanner::class, 'id_campaign_banner', 'id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user', 'id');
+    }
+
     public static function boot()
     {
        parent::boot();

@@ -15,6 +15,17 @@ class UserWishes extends Model
         'id_wish',
         'is_active',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user', 'id');
+    }
+
+    public function wish()
+    {
+        return $this->belongsTo(Wish::class, 'id_wish', 'id');
+    }
+
     public static function boot()
     {
        parent::boot();

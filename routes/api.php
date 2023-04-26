@@ -14,6 +14,7 @@ use App\Http\Controllers\WithdrawController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\CampaignReportController;
 use App\Http\Controllers\CampaignReportDetailController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -58,6 +59,7 @@ Route::controller(AuthController::class)->group(function () {
 |---------------------------------------------------------------------------|
 | http://127.0.0.1:8000/api/user-banks                  |GET|POST|PUT|DELETE|
 | http://127.0.0.1:8000/api/user-actives                |GET|POST|PUT|DELETE|
+| http://127.0.0.1:8000/api/users                       |GET|POST|PUT|DELETE|
 | http://127.0.0.1:8000/api/wishes                      |GET|POST|PUT|DELETE|
 | http://127.0.0.1:8000/api/user-wishes                 |GET|POST|PUT|DELETE|
 | http://127.0.0.1:8000/api/news                        |GET|POST|PUT|DELETE|
@@ -71,6 +73,17 @@ Route::controller(AuthController::class)->group(function () {
 | http://127.0.0.1:8000/api/transactions                |GET|POST|PUT|DELETE|
 |---------------------------------------------------------------------------|
 */
+
+// user_banks
+Route::group(['prefix' => 'user'], function ($router) {
+    Route::group(['middleware' => 'auth:1,2,3'], function ($router) {
+        $router->get('', [UserController::class, 'index']);
+        $router->get('/{id}', [UserController::class, 'show']);
+        $router->post('', [UserController::class, 'store']);
+        $router->put('{id}', [UserController::class, 'update']);
+        $router->delete('{id}', [UserController::class, 'destroy']);
+    });
+});
 
 // user_banks
 Route::group(['prefix' => 'user-banks'], function ($router) {

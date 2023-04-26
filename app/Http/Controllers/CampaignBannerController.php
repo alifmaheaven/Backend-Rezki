@@ -21,6 +21,14 @@ class CampaignBannerController extends Controller
             }
         }
 
+        // Include related data
+        if ($request->query('include')) {
+            $includes = $request->query('include');
+            foreach ($includes as $include) {
+                $data = $data->with($include);
+            }
+        }
+
         // Apply is_active condition and paginate
         $data = $data->where('is_deleted', false)->paginate(10, ['*'], 'page', $current_page);
 
@@ -119,4 +127,3 @@ class CampaignBannerController extends Controller
         ]);
     }
 }
-

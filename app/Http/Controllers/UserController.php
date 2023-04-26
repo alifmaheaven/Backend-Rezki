@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Payment;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class PaymentController extends Controller
+use function PHPUnit\Framework\isEmpty;
+
+class UserController extends Controller
 {
     public function index(Request $request)
     {
         $current_page = $request->query('current_page', 1);
-        $data = new Payment;
+        $data = new User();
 
         // Apply filters
-        $fillable_column = (new Payment())->getFillable();
+        $fillable_column = (new User())->getFillable();
         foreach ($fillable_column as $column) {
             if ($request->query($column)) {
                 $data = $data->where($column, 'like', '%' . $request->query($column) . '%');
@@ -46,12 +48,11 @@ class PaymentController extends Controller
 
     public function store(Request $request)
     {
+
         $validator = Validator::make($request->all(), [
-            'payment_method' => 'required|string|max:255',
-            'service_fee' => 'required|string|max:255',
-            'status' => 'required|string|max:255',
-            'id_user' => 'required',
-            'id_campaign' => 'required',
+            'bank_name' => 'required|string|max:255',
+            'account_number' => 'required|max:255',
+            'account_name' => 'required|string|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -62,12 +63,10 @@ class PaymentController extends Controller
             ], 422);
         }
 
-        $data = Payment::create([
-            'payment_method' => $request->payment_method,
-            'service_fee' => $request->service_fee,
-            'status' => $request->status,
-            'id_user' => $request->id_user,
-            'id_campaign' => $request->id_campaign,
+        $data = User::create([
+            'bank_name' => $request->bank_name,
+            'account_number' => $request->account_number,
+            'account_name' => $request->account_name,
         ]);
 
         return response()->json([
@@ -80,23 +79,20 @@ class PaymentController extends Controller
 
     public function show($id)
     {
-        $data = Payment::find($id);
+        $data = User::find($id);
         return response()->json([
             'status' => 'success',
             'message' => 'Data retrieved successfully',
             'data' => $data,
-            'server_time' => (int) round(microtime(true) * 1000),
         ]);
     }
 
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'payment_method' => 'required|string|max:255',
-            'service_fee' => 'required|string|max:255',
-            'status' => 'required|string|max:255',
-            'id_user' => 'required',
-            'id_campaign' => 'required',
+            'bank_name' => 'required|string|max:255',
+            'account_number' => 'required|max:255',
+            'account_name' => 'required|string|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -107,12 +103,10 @@ class PaymentController extends Controller
             ], 422);
         }
 
-        $data = Payment::find($id);
-        $data->payment_method = $request->payment_method;
-        $data->service_fee = $request->service_fee;
-        $data->status = $request->status;
-        $data->id_user = $request->id_user;
-        $data->id_campaign = $request->id_campaign;
+        $data = User::find($id);
+        $data->bank_name = $request->bank_name;
+        $data->account_number = $request->account_number;
+        $data->account_name = $request->account_name;
         $data->save();
 
         return response()->json([
@@ -126,7 +120,7 @@ class PaymentController extends Controller
 
     public function destroy($id)
     {
-        $data = Payment::find($id);
+        $data = User::find($id);
         $data->is_deleted = true;
         $data->save();
         // $data->delete();

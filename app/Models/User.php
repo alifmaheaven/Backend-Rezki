@@ -61,6 +61,16 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
+    public function user_active()
+    {
+        return $this->belongsTo(UserActive::class, 'id_user_active', 'id');
+    }
+
+    public function user_bank()
+    {
+        return $this->belongsTo(UserBank::class, 'id_user_bank', 'id');
+    }
+
     public static function boot()
     {
        parent::boot();
